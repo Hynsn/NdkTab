@@ -5,10 +5,10 @@
 #include "mylib/SmartPointer.h"
 #include "mylib/Exception.h"
 
-#include "mylib/List.h"
 #include "mylib/StaticList.h"
 #include "mylib/DynamicList.h"
 #include "mylib/StaticArray.h"
 #include "mylib/DynamicArray.h"
+#include "mylib/LinkList.h"
 
 #endif // MYLIB_H
