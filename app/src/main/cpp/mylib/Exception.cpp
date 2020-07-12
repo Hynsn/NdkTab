@@ -11,7 +11,7 @@ namespace HynLib {
 
 void Exception::init(const char* msg,const char* file,int line)
 {
-    m_message = strdup(msg);
+    m_message = msg ? strdup(msg) : NULL;
     if(file!=nullptr){
         char sl[16] = {0};
         //itoa(line,sl,10);

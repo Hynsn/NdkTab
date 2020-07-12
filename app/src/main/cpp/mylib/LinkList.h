@@ -31,7 +31,7 @@ protected:
     virtual Node* create(){
         return new Node();
     }
-    virtual void destory(Node* pt){
+    virtual void destroy(Node* pt){
         delete pt;
     }
 
@@ -87,7 +87,7 @@ public:
             Node* toDel = current->next;
             current->next = toDel->next;
             //delete toDel;
-            destory(toDel);
+            destroy(toDel);
 
             m_length--;
         }
@@ -156,7 +156,7 @@ public:
             m_header.next = toDel->next;
 
             //delete toDel;
-            destory(toDel);
+            destroy(toDel);
         }
         m_length = 0;
     }

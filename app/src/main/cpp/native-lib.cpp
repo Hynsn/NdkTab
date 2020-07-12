@@ -42,7 +42,12 @@ const char * LOG_TGA = "LOG_TGA";
 顺序表：数据元素类型相对简单，不涉及深拷贝。数据元素相对稳定，访问操作远多于插入和删除操作。
 单链表：数据元素类型复杂，复制操作相对耗时。数据元素不稳定，需经常插入和删除访问操作较少。
  */
-#define TEST22_LINKLIST 1
+#define TEST22_LINKLIST 0
+// 静态单链表
+/*
+单链表的一个缺点：长时间使用单链表对象频繁增加和删除数据，堆空间会产生大量的内存碎片导致系统运行缓慢。
+ */
+#define TEST22_STATICLINKLIST 1
 
 #if TEST6_SEARCH
 
@@ -270,6 +275,19 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
 
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "testList");
 
+#endif
+
+#if TEST22_STATICLINKLIST
+    StaticLinkList<int,10> ll1;
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "ll1: %d,%d",ll1.capacity(),ll1.length());
+    ll1.insert(5);
+
+    for(int i=0; i<5; i++) {
+        ll1.insert(i);
+    }
+    for (ll1.move(0); !ll1.end(); ll1.next()) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "ll1: %d,%d",ll1.current(),ll1.length());
+    }
 #endif
     std::string str = "Exception";
     return env->NewStringUTF(str.c_str());

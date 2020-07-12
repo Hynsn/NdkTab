@@ -10,5 +10,6 @@
 #include "mylib/StaticArray.h"
 #include "mylib/DynamicArray.h"
 #include "mylib/LinkList.h"
+#include "mylib/StaticLinkList.h"
 
 #endif // MYLIB_H
