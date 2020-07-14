@@ -8,6 +8,7 @@ template<typename T, int N>
 class StaticLinkList : public LinkList<T> {
 protected:
     typedef typename LinkList<T>::Node Node;
+
     struct SNode : Node{
         void* operator new(size_t size, void* ps){
             (void)size;
@@ -38,6 +39,7 @@ protected:
             if(psn == (space+i)){
                 m_used[i] = 0;
                 psn->~SNode();
+                break;
             }
         }
     }
@@ -51,10 +53,9 @@ public:
     int capacity(){
         return N;
     }
-//    ~StaticLinkList()
-//    {
-//        //clear();
-//    }
+    ~StaticLinkList(){
+        this->clear();
+    }
 };
 }
 #endif // STATICLINKLIST_H

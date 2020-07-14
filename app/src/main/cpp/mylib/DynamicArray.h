@@ -44,7 +44,7 @@ protected:
         }
     }
 public:
-    DynamicArray(int length){
+    DynamicArray(int length = 0){
         init(new T[length],length); // 优化代码
         /*
         this->m_array = new T[length];

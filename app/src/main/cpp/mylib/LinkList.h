@@ -85,11 +85,11 @@ public:
             Node* current = position(i);
 
             Node* toDel = current->next;
+            if(m_current == toDel) m_current = toDel->next;
             current->next = toDel->next;
+            m_length--;
             //delete toDel;
             destroy(toDel);
-
-            m_length--;
         }
         return ret;
     }
@@ -155,10 +155,10 @@ public:
             Node* toDel = m_header.next;
             m_header.next = toDel->next;
 
+            m_length--;
             //delete toDel;
             destroy(toDel);
         }
-        m_length = 0;
     }
 
     bool move(int i, int step = 1)
