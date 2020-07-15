@@ -46,8 +46,12 @@ const char * LOG_TGA = "LOG_TGA";
 // 静态单链表
 /*
 单链表的一个缺点：长时间使用单链表对象频繁增加和删除数据，堆空间会产生大量的内存碎片导致系统运行缓慢。
+单链表的clear、remove操作需考虑异常安全，remove 操作后current指向下一个节点。
+ 注，子类的构造函数和析构函数是不能发生多态的，调用构造函数和析构函数必须要是当前类的实现版本
  */
 #define TEST22_STATICLINKLIST 1
+//
+#define TEST34_STATICSTACK 1
 
 #if TEST6_SEARCH
 
