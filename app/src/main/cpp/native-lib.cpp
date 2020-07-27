@@ -49,9 +49,16 @@ const char * LOG_TGA = "LOG_TGA";
 单链表的clear、remove操作需考虑异常安全，remove 操作后current指向下一个节点。
  注，子类的构造函数和析构函数是不能发生多态的，调用构造函数和析构函数必须要是当前类的实现版本
  */
-#define TEST22_STATICLINKLIST 1
-//
-#define TEST34_STATICSTACK 1
+#define TEST22_STATICLINKLIST 0
+
+// 数组栈，特殊的线性表唯一特性 先进后出。
+// 使用原生数组作为存储结构，存在缺点就是，链表构造函数和析构函数初始化时需要频繁执行。
+#define TEST34_STATICSTACK 0
+
+// 链式栈，栈非常适用于就近匹配的场合
+#define TEST35_LINKSTACK 0
+
+#define TEST39_HSTRING 1
 
 #if TEST6_SEARCH
 
@@ -116,6 +123,90 @@ public:
         return v == t.v;
     }
 };
+#endif
+
+#if TEST34_STATICSTACK
+class Test : public Object
+{
+public:
+    Test(){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Test()");
+    }
+    ~Test(){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "~Test()");
+    }
+};
+#endif
+
+#if TEST35_LINKSTACK
+class Test : public Object
+{
+public:
+    Test(){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Test()");
+    }
+    ~Test(){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "~Test()");
+    }
+};
+
+bool is_left(char c){
+    return (c=='(') || (c=='[') || (c=='{') || (c=='<');
+}
+bool is_right(char c){
+    return (c==')') || (c==']') || (c=='}') || (c=='>');
+}
+bool is_quot(char c){
+    return (c=='\'') || (c=='\"');
+}
+bool is_match(char l,char r){
+    return (l=='\'') && (r=='\'') ||
+            (l=='\"') && (r=='\"') ||
+            (l=='(') && (r==')') ||
+            (l=='{') && (r=='}') ||
+            (l=='[') && (r==']') ||
+            (l=='<') && (r=='>');
+}
+
+bool scan(const char* s){
+    LinkStack<char> stack;
+    bool ret = true;
+    int i = 0;
+
+    while (ret && s[i]!='\0'){
+        if(is_left(s[i])){
+            stack.push(s[i]);
+        }
+        else if(is_right(s[i])) {
+            if((stack.size()>0) && is_match(stack.top(),s[i])) stack.pop(); else ret = false;
+        }
+        else if(is_quot(s[i])){
+            // 栈空或者 左符号和右符号不匹配时入栈
+            if(stack.size()==0 || !is_match(stack.top(),s[i])) stack.push(s[i]);
+            else if(is_match(stack.top(),s[i])) stack.pop();
+        }
+
+        i++;
+    }
+
+    return ret && (stack.size()==0);
+}
+
+
+#endif
+
+#if TEST39_HSTRING
+void test_1(){
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "begin--");
+
+    HString s;
+    s = 'D';
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "len: %d str: %s",s.length(),s.str());
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "== %d",(s =="D" ? 1 : 0));
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "> %d",(s > "CC" ? 1 : 0));
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "end--");
+}
 #endif
 
 extern "C" JNIEXPORT jstring JNICALL
@@ -293,6 +384,54 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "ll1: %d,%d",ll1.current(),ll1.length());
     }
 #endif
-    std::string str = "Exception";
+
+#if TEST34_STATICSTACK
+
+//    StaticStack<int,8> stack;
+//    try {
+//        stack.pop();
+//    }
+//    catch (const Exception& e) {
+//        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Exception %s %s",e.message(),e.location());
+//    }
+//
+//    for (int i = 0; i < 8; ++i) {
+//        stack.push(i);
+//    }
+//    while (stack.size()>0){
+//        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.top: %d",stack.top());
+//        stack.pop();
+//    }
+
+    StaticStack<Test,20> stack;
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.size: %d",stack.size());
+
+#endif
+#if TEST35_LINKSTACK
+
+    LinkStack<int> stack;
+    try {
+        stack.pop();
+    }
+    catch (const Exception& e) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Exception %s %s",e.message(),e.location());
+    }
+
+    for (int i = 0; i < 8; ++i) {
+        stack.push(i);
+    }
+    while (stack.size()>0){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.top: %d",stack.top());
+        stack.pop();
+    }
+
+//    LinkStack<Test> stack;
+//    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.size: %d",stack.size());
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.is match: %d",scan("{\"title\":\"json在线解析（简版） -JSON在线解析\",\"json.url\":\"https://www.sojson.com/simple_json.html\",\"keywords\":\"json在线解析\",\"功能\":[\"JSON美化\",\"JSON数据类型显示\",\"JSON数组显示角标\",\"高亮显示\",\"错误提示\",{\"备注\":[\"www.sojson.com\",\"json.la\"]}],\"加入我们\":{\"qq群\":\"259217951\"}}"));
+#endif
+#if TEST39_HSTRING
+    test_1();
+#endif
+    string str = "Exception";
     return env->NewStringUTF(str.c_str());
 }
