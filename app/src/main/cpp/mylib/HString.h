@@ -10,6 +10,8 @@ protected:
     char* m_str;
     int m_length;
     void init(const char* s);
+
+    bool equal(const char* l,const char* r,int len) const;
 public:
     HString();
     ~HString();
@@ -19,6 +21,9 @@ public:
 
     int length() const;
     const char* str() const;
+
+    char& operator [] (int i);
+    char operator [] (int i) const ;
 
     bool operator == (const HString& s) const;
     bool operator == (const char* s) const;
@@ -40,6 +45,15 @@ public:
     HString& operator = (const HString& s);
     HString& operator = (const char* s);
     HString& operator = (const char c);
+
+    bool startWith(const HString& s) const;
+    bool startWith(const char* s) const ;
+    bool endWith(const HString& s) const ;
+    bool endWith(const char* s) const;
+    HString& insert(int i, const char* s);
+    HString& insert(int i, const HString& s);
+
+    HString& trim();
 };
 }
 

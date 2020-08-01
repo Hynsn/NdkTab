@@ -15,6 +15,8 @@
 
 #include "mylib/StaticStack.h"
 #include "mylib/LinkStack.h"
+#include "mylib/StaticQueue.h"
+#include "mylib/LinkQueue.h"
 
 #include "mylib/Test.h"
 

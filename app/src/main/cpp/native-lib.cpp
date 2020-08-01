@@ -58,7 +58,12 @@ const char * LOG_TGA = "LOG_TGA";
 // 链式栈，栈非常适用于就近匹配的场合
 #define TEST35_LINKSTACK 0
 
-#define TEST39_HSTRING 1
+// 数组队列，先进先出，使用原生数组实现容量由模板参数决定，采用循环计数法实现队列的操作
+#define TEST36_STATICQUEUE 0
+
+#define TEST36_LINKQUEUE 1
+
+#define TEST39_HSTRING 0
 
 #if TEST6_SEARCH
 
@@ -201,9 +206,25 @@ void test_1(){
 
     HString s;
     s = 'D';
+
+    for (int i = 0; i < s.length(); ++i) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "[i]-%c",s[i]);
+    }
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "len: %d str: %s",s.length(),s.str());
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "== %d",(s =="D" ? 1 : 0));
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "> %d",(s > "CC" ? 1 : 0));
+
+    HString str1 = "test hollo";
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "start:%d",str1.startWith("tet") ? 1:0);
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "end:%d",str1.endWith("hllo") ? 1:0);
+
+    HString str2 = "";
+    str2.insert(0,"test");
+    str2.insert(3,"world");
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "str2: %s",str2.str());
+
+    HString str3 = "  test  ";
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "str3: %s",str3.trim().str());
 
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "end--");
 }
@@ -428,6 +449,27 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
 //    LinkStack<Test> stack;
 //    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.size: %d",stack.size());
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "stack.is match: %d",scan("{\"title\":\"json在线解析（简版） -JSON在线解析\",\"json.url\":\"https://www.sojson.com/simple_json.html\",\"keywords\":\"json在线解析\",\"功能\":[\"JSON美化\",\"JSON数据类型显示\",\"JSON数组显示角标\",\"高亮显示\",\"错误提示\",{\"备注\":[\"www.sojson.com\",\"json.la\"]}],\"加入我们\":{\"qq群\":\"259217951\"}}"));
+#endif
+#if TEST36_STATICQUEUE
+    StaticQueue<int,5> queue;
+    for (int i = 0; i < 5; ++i) {
+        queue.add(i);
+    }
+    while (queue.length()>0){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "queue: %d",queue.front());
+
+        queue.remove();
+    }
+#endif
+#if TEST36_LINKQUEUE
+    LinkQueue<int> queue;
+    for (int i = 0; i < 5; ++i) {
+        queue.add(i);
+    }
+    while (queue.length()>0){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "queue: %d",queue.front());
+        queue.remove();
+    }
 #endif
 #if TEST39_HSTRING
     test_1();
