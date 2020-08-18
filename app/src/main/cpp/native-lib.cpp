@@ -21,6 +21,11 @@ const char * LOG_TGA = "LOG_TGA";
 */
 #define TEST6_SEARCH    0
 // 智能指针
+/*
+1、指针生命周期结束时主动释放堆空间
+2、一片堆空间最多只能由一个指针标识
+3、杜绝指针运算和指针比较
+ */
 #define TEST9_SMARTPOINTER  0
 // 异常
 #define TEST11_EXCEPTION  0
@@ -51,6 +56,16 @@ const char * LOG_TGA = "LOG_TGA";
  */
 #define TEST22_STATICLINKLIST 0
 
+
+// 共享智能指针
+/*
+智能指针使用约定
+ 1、只能用来指向堆空间的单个变量
+ 2、不同类型智能指针不要混合使用
+ 3、不要使用delete 释放智能指针指向的堆空间
+ */
+#define TEST28_SHAREDPOINTER 0
+
 // 数组栈，特殊的线性表唯一特性 先进后出。
 // 使用原生数组作为存储结构，存在缺点就是，链表构造函数和析构函数初始化时需要频繁执行。
 #define TEST34_STATICSTACK 0
@@ -61,9 +76,12 @@ const char * LOG_TGA = "LOG_TGA";
 // 数组队列，先进先出，使用原生数组实现容量由模板参数决定，采用循环计数法实现队列的操作
 #define TEST36_STATICQUEUE 0
 
-#define TEST36_LINKQUEUE 1
+#define TEST36_LINKQUEUE 0
 
 #define TEST39_HSTRING 0
+
+#define TEST44_RECURSION 1
+
 
 #if TEST6_SEARCH
 
@@ -130,6 +148,21 @@ public:
 };
 #endif
 
+#if TEST28_SHAREDPOINTER
+class Test
+{
+public:
+    int value;
+
+    Test(){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Test()");
+    }
+    ~Test(){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "~Test()");
+    }
+};
+#endif
+
 #if TEST34_STATICSTACK
 class Test : public Object
 {
@@ -141,6 +174,179 @@ public:
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "~Test()");
     }
 };
+#endif
+
+#if TEST44_RECURSION
+void swap1(char* a,char *b);
+// 汉诺塔递归
+void HanoiTower(int n,char a,char b,char c){
+    if(n==1){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "move: %c --> %c",a,c);
+    }
+    else{
+        HanoiTower(n-1,a,c,b); // 先将n-1块模块由a借助c移动到b
+        HanoiTower(1,a,b,c); // 将最下面的木块直接移动到C
+        HanoiTower(n-1,b,a,c); //将剩下的n-1块木块从b借助a移动到c
+    }
+}
+
+void  Allarrange(char *str,int k,int len)
+{
+    int i;
+    if(k==len)
+    {
+        static int s_i=1;
+        //printf("第%d种排列为:\t%s\n",s_i++,str);
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "id %d: %s ",s_i++,str);
+    }
+    else
+    {
+        for(i=k;i<=len;i++)
+        {
+            swap1(str+i,str+k);
+            Allarrange(str,k+1,len);
+            swap1(str+i,str+k);
+        }
+    }
+}
+
+// 集合全排列，当字符重复时存在bug
+void swap1(char* a,char *b)
+{
+    char temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+/*
+测试存在全排列存在重复的bug
+char ddd[] = "aacdd";
+permutation(ddd,ddd);
+ */
+void permutation(char* s,char* p){
+    if(*s =='\0'){
+        static int s_i = 1;
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "id %d: %s ",s_i++,p);
+    }
+    else{
+        int len = strlen(s);
+        for (int i = 0; i < len; i++) {
+            if((i==0) || (s[0] != s[i])){
+                swap1(&s[0],&s[i]);
+                permutation(s+1,p);
+                swap1(&s[0],&s[i]);
+            }
+        }
+    }
+}
+
+void permutation(char s[],int b,int e)
+{
+    if((b >= 0)&&(b <= e))
+    {
+        if(b == e)
+        {
+            __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "id2: %s ",s);
+        }
+        else
+        {
+            int i = 0;
+
+            for(i = b;i <= e;i++)
+            {
+                int flag = s[b];
+                s[b] = s[i];
+                s[i] = flag;
+                if(s[b] != s[i] || i == b)
+                    permutation(s,b+1,e);
+
+                flag = s[b];
+                s[b] = s[i];
+                s[i] = flag;
+            }
+        }
+    }
+}
+
+struct Node{
+    int value;
+    Node* next;
+};
+
+// 创建尾节点为null的链表
+Node* create_list(int v,int len){
+    Node* ret = NULL;
+    Node* slider = NULL;
+
+    for (int i = 0; i < len; i++) {
+        Node* n = new Node();
+        n->value = v++;
+        n->next = NULL;
+
+        if(slider == NULL){
+            slider = n;
+            ret = n;
+        }
+        else {
+            slider->next = n;
+            slider = n;
+        }
+    }
+
+    return ret;
+}
+
+void destory_list(Node* list){
+    while (list){
+        Node* del = list;
+        list = list->next;
+
+        delete del;
+    }
+}
+
+void print_list(Node* list){
+    while (list){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "%d ->",list->value);
+        list = list->next;
+    }
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "null");
+}
+
+Node* reverse(Node* list){
+    if(list==NULL || list->next==NULL){
+        return list;
+    }
+    else{
+        Node* guard = list->next; // 边节点
+
+        Node* ret = reverse(list->next); // 边节点求逆
+
+        guard->next = list; // 别节点指向原节点
+
+        list->next = NULL;
+
+        return ret;
+    }
+}
+
+Node* marge(Node* list1,Node* list2){
+    if(list1==NULL) return list2;
+    else if(list2==NULL) return list1;
+    else if(list1->value < list2->value){
+        Node* list1_ = list1->next;  // 拆分list1
+        Node* list = marge(list1_,list2); // 归并
+        list1->next = list; // list1指向归并结果并返回
+        return list1;
+    }
+    else {
+        Node* list2_ = list2->next; // 拆分list2
+        Node* list = marge(list1,list2_); // 归并
+        list2->next = list; // list2指向归并结果并返回
+        return list2;
+    }
+}
+
 #endif
 
 #if TEST35_LINKSTACK
@@ -406,6 +612,22 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     }
 #endif
 
+#if TEST28_SHAREDPOINTER
+    SharePointer<Test> sp0 = new Test();
+    SharePointer<Test> sp1 = sp0;
+    SharePointer<Test> sp2 = nullptr;
+
+    sp2 = sp1;
+    sp0->value = 100;
+
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "SharePointer.value: %d",sp0->value);
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "SharePointer.value: %d",sp1->value);
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "SharePointer.value: %d",sp2->value);
+    sp1.clear();
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "SharePointer op: %d",(sp1==sp0));
+#endif
+
 #if TEST34_STATICSTACK
 
 //    StaticStack<int,8> stack;
@@ -474,6 +696,25 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
 #if TEST39_HSTRING
     test_1();
 #endif
+
+#if TEST44_RECURSION
+    //HanoiTower(3,'A','B','C');
+//    char ddd[] = "aacdd";
+//    permutation(ddd,ddd);
+
+//    Node* list = create_list(1,10);
+//    print_list(list);
+//    print_list(reverse(list));
+//    destory_list(list);
+    Node* list1 = create_list(1,5);
+    Node* list2 = create_list(4,6);
+    Node* list = marge(list1,list2);
+    print_list(list);
+    destory_list(list);
+#endif
+
     string str = "Exception";
+
     return env->NewStringUTF(str.c_str());
 }
+

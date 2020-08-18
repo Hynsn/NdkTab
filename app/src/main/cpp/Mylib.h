@@ -12,6 +12,7 @@
 #include "mylib/DynamicArray.h"
 #include "mylib/LinkList.h"
 #include "mylib/StaticLinkList.h"
+#include "mylib/SharedPointer.h"
 
 #include "mylib/StaticStack.h"
 #include "mylib/LinkStack.h"
