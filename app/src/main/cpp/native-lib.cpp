@@ -78,9 +78,16 @@ const char * LOG_TGA = "LOG_TGA";
 
 #define TEST36_LINKQUEUE 0
 
-#define TEST39_HSTRING 0
+/**
+ * KMP子串查找算法
+ * 匹配失败时向右移动的位数和目标串无关，和子串有关
+ * 移动位数 = 已匹配字符数 - 对应的部分匹配值
+ * 任意子串都存在一个唯一的部分匹配表？？
+ * KMP算法 -> 子串 ->部分匹配值 -> 最终转换为求子串的部分匹配表
+ */
+#define TEST39_HSTRING 1
 
-#define TEST44_RECURSION 1
+#define TEST44_RECURSION 0
 
 
 #if TEST6_SEARCH
@@ -344,6 +351,20 @@ Node* marge(Node* list1,Node* list2){
         Node* list = marge(list1,list2_); // 归并
         list2->next = list; // list2指向归并结果并返回
         return list2;
+    }
+}
+
+/**
+ * 函数调用过程：一个特殊的内存区供函数使用，用于保存函数的实参局部变量临时变量等。类似于栈
+ * 从起始地址向上增长，存在栈顶指针用于回退。
+ *
+ */
+void r_print_event(Node* list){
+    if(list!=NULL){
+        r_print_event(list->next);
+        if((list->value %2) ==0){
+            __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "% d ",list->value);
+        }
     }
 }
 
@@ -694,7 +715,26 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     }
 #endif
 #if TEST39_HSTRING
-    test_1();
+    //test_1();
+
+    HString string1 = "ababax";
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "s1 %s ",string1.remove(1,2).str());
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "s1 %d ",string1.remove(1,2).length());
+
+    HString string2 = "ababax";
+    HString string3 = string2 - "ba";
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "s1: %s , s2: %s ",string2.str(),string3.str());
+
+    string2 -= "ba";
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "s1: %s , s2: %s ",string2.str(),string3.str());
+
+    string2.replace("ba","xyz");
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "s1: %s , s2: %s ",string2.str(),string3.str());
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "s2.sub: %s",string2.sub(3,4).str());
+
 #endif
 
 #if TEST44_RECURSION
@@ -706,11 +746,18 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
 //    print_list(list);
 //    print_list(reverse(list));
 //    destory_list(list);
+//    Node* list1 = create_list(1,5);
+//    Node* list2 = create_list(4,6);
+//    Node* list = marge(list1,list2);
+//    print_list(list);
+//    destory_list(list);
+
     Node* list1 = create_list(1,5);
-    Node* list2 = create_list(4,6);
-    Node* list = marge(list1,list2);
-    print_list(list);
-    destory_list(list);
+    print_list(list1);
+
+    r_print_event(list1);
+
+    destory_list(list1);
 #endif
 
     string str = "Exception";
