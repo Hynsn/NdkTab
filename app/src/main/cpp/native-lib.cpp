@@ -85,9 +85,30 @@ const char * LOG_TGA = "LOG_TGA";
  * 任意子串都存在一个唯一的部分匹配表？？
  * KMP算法 -> 子串 ->部分匹配值 -> 最终转换为求子串的部分匹配表
  */
-#define TEST39_HSTRING 1
+#define TEST39_HSTRING 0
 
 #define TEST44_RECURSION 0
+
+/**
+ * 排序的稳定性也比较重要，比较和交换是排序的基本操作。时间性能是排序算法好坏的主要条件。
+ * 多关键字排序和单关键字排序无本质区别，多关键字排序重载运算符增加判断的条件即可。
+ *
+ * 选择排序和插入排序时间复杂度都是O(n2)，插入排序是稳定的。
+ * 希尔排序时间复杂度突破了O(n2)
+ *
+ * 归并排序的基本思想：将两个或两个以上的有序序列合并成一个新的有序序列，需要用到递归、一边归并一边排序。
+ *
+ * 快速排序的基本思想：任取某个元素作为基准将序列划分为左右两个序列，左序列所有元素都小于等于基准，
+ * 右序列都大于基准基准位于序列中间。对两个子序列递归的划分，直到所有元素都满足上述条件
+ *
+ */
+#define TEST46_SORT 0
+
+/**
+ * 排序过程关键操作就是比较和交换，交换的本质就是元素间的复制。当元素体积较大时 元素交换耗时较大
+ *
+ */
+#define TEST50_SORT 1
 
 
 #if TEST6_SEARCH
@@ -457,6 +478,76 @@ void test_1(){
 }
 #endif
 
+
+#if TEST50_SORT
+
+#include "ctime"
+
+struct Test :public Object{
+    int id;
+    int data1[1000];
+    double data2[1000];
+
+    bool operator < (const Test& obj){
+        return id < obj.id;
+    }
+    bool operator >= (const Test& obj){
+        return id >= obj.id;
+    }
+    bool operator > (const Test& obj){
+        return id > obj.id;
+    }
+    bool operator <= (const Test& obj){
+        return id <= obj.id;
+    }
+};
+
+class TestProxy : public Object{
+protected:
+    Test* m_ptest;
+public:
+//    TestProxy(Test* pTest){
+//        m_ptest = pTest;
+//    }
+    int id(){
+        return m_ptest->id;
+    }
+    int* data1(){
+        return m_ptest->data1;
+    }
+    double * data2(){
+        return m_ptest->data2;
+    }
+
+    Test & test() const {
+        return *m_ptest;
+    }
+
+    bool operator < (const TestProxy& obj){
+        return test() < obj.test();
+    }
+    bool operator >= (const TestProxy& obj){
+        return test() >= obj.test();
+    }
+    bool operator > (const TestProxy& obj){
+        return test() > obj.test();
+    }
+    bool operator <= (const TestProxy& obj){
+        return test() <= obj.test();
+    }
+
+    Test& operator = (Test& test){
+        m_ptest = &test;
+        return test;
+    }
+};
+
+Test tp[1000];
+
+TestProxy pt[1000];
+
+#endif
+
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         JNIEnv* env, jobject /* this */) {
@@ -760,8 +851,50 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     destory_list(list1);
 #endif
 
+#if TEST46_SORT
+
+    int arry[] = {1,0,5,4,6,7,8,11,3};
+    int length = sizeof(arry) / sizeof(int);
+    /*
+//    Sort::Select(arry,length, true);
+//    Sort::Insert(arry,length, false);
+//    Sort::Bubble(arry,length, true);
+//    Sort::Shell(arry,length, false);
+//    Sort::Merge(arry,length, false);
+    Sort::Quick(arry,length);
+
+    for (int i = 0; i < length; ++i) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "array: %d ",arry[i]);
+    }
+*/
+    StaticArray<int,9> sa;
+    for (int i = 0; i < length; ++i) {
+        sa[i] = arry[i];
+    }
+    Sort::Insert(sa, false);
+    for (int i = 0; i < sa.length(); ++i) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "sa: %d ",sa[i]);
+    }
+
+#endif
+
+#if TEST50_SORT
+
+    clock_t start=0,end=0;
+
+    for (int i = 0; i < 1000; ++i) {
+        tp[i].id = i;
+        pt[i] = tp[i];
+    }
+    start = clock();
+    Sort::Bubble(pt,1000, false);
+    end = clock();
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Time: %ld ",(end-start));
+
+#endif
+
     string str = "Exception";
 
     return env->NewStringUTF(str.c_str());
 }
-

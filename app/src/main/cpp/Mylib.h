@@ -19,6 +19,8 @@
 #include "mylib/StaticQueue.h"
 #include "mylib/LinkQueue.h"
 
+#include "mylib/Sort.h"
+
 #include "mylib/Test.h"
 
 #endif // MYLIB_H

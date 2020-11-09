@@ -26,6 +26,11 @@ public:
         }
         return ret;
     }
+
+    T* array() const {
+        return m_array;
+    }
+
     virtual int length() const = 0;
     // 数据访问操作符
     T& operator[] (int i){
