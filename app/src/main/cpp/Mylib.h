@@ -21,6 +21,9 @@
 
 #include "mylib/Sort.h"
 
+#include "mylib/GTree.h"
+#include "mylib/GTreeNode.h"
+
 #include "mylib/Test.h"
 
 #endif // MYLIB_H

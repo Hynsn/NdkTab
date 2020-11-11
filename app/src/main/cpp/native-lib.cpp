@@ -108,8 +108,14 @@ const char * LOG_TGA = "LOG_TGA";
  * 排序过程关键操作就是比较和交换，交换的本质就是元素间的复制。当元素体积较大时 元素交换耗时较大
  *
  */
-#define TEST50_SORT 1
+#define TEST50_SORT 0
 
+/**
+ * 树
+ *
+ *
+ */
+#define TEST52_GTREE 1
 
 #if TEST6_SEARCH
 
@@ -891,6 +897,79 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     end = clock();
 
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "Time: %ld ",(end-start));
+
+#endif
+
+#if TEST52_GTREE
+    /*
+    GTree<int> t;
+    GTreeNode<int> p;
+    t.find(0);
+    t.find(&p);
+     */
+
+    GTree<char> t;
+    GTreeNode<char>* node = nullptr;
+    t.insert('A', nullptr);
+
+    node = t.find('A');
+    t.insert('B', node);
+    t.insert('C', node);
+    t.insert('D', node);
+
+    node = t.find('B');
+    t.insert('E', node);
+    t.insert('F', node);
+
+    node = t.find('E');
+    t.insert('K', node);
+    t.insert('L', node);
+
+    node = t.find('C');
+    t.insert('G', node);
+
+    node = t.find('D');
+    t.insert('H', node);
+    t.insert('I', node);
+    t.insert('J', node);
+
+    node = t.find('H');
+    t.insert('M', node);
+    //t.clear();
+
+    //t.remove('D');
+
+    const char* s = "KLFGMIJ";
+//    for (int i = 0; i < 7; ++i) {
+//        TreeNode<char>* node = t.find(s[i]);
+//        while (node!= nullptr){
+//            __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, " %c ",node->value);
+//
+//            node = node->parent;
+//        }
+//    }
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, " count: %d height: %d degre: %d",t.count(),t.height(),t.degree());
+
+    for (t.begin(); !t.end(); t.next()) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current: %c",t.current());
+    }
+
+    SharePointer<Tree<char>> sp = t.remove(t.find('D'));
+    for (int i = 0; i < 7; ++i) {
+        TreeNode<char>* node = sp->find(s[i]);
+        while (node!= nullptr){
+            __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, " %c ",node->value);
+
+            node = node->parent;
+        }
+    }
+
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, " count: %d height: %d degre: %d",t.count(),t.height(),t.degree());
+
+    for (t.begin(); !t.end(); t.next()) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current: %c",t.current());
+    }
+
 
 #endif
 
