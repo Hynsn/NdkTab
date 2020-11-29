@@ -13,6 +13,8 @@ template <typename T>
 class Tree : public Object{
 protected:
     TreeNode<T>* m_root;
+    Tree(const Tree<T>&);
+    Tree<T>& operator = (const Tree<T>&);
 public:
     Tree(){ m_root = nullptr; }
     virtual bool insert(TreeNode<T>* node) = 0;

@@ -23,7 +23,8 @@
 
 #include "mylib/GTree.h"
 #include "mylib/GTreeNode.h"
-
+#include "mylib/BTree.h"
+#include "mylib/BTreeNode.h"
 #include "mylib/Test.h"
 
 #endif // MYLIB_H

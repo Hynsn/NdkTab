@@ -111,11 +111,32 @@ const char * LOG_TGA = "LOG_TGA";
 #define TEST50_SORT 0
 
 /**
- * 树
- *
+ * 通用树
+ * 双亲孩子表示法：每个结点都有一个指向父亲的指针，每个结点都有若干个指向孩子的指针。
+ * 孩子兄弟表示法：每个结点都有指向第一个孩子的指针，每个结点都有一个指向第一个右兄弟的指针。
+ * 特点：能够表示任意的树形结构；每个结点包含一个数据和两个指针；孩子结点指针和兄弟结点指针构成了树杈。
  *
  */
 #define TEST52_GTREE 1
+
+/**
+ * 二叉树
+ * 由n个结点组成的有限集合，该集合为空或由根节点加上两棵树（左子树、右子树）互不相交的二叉树构成。
+ * 有5种形态。
+ * 特殊的二叉树：满二叉树，除叶子结点其余结点度数都为2.
+ * 完全二叉树，每个结点和高度为K的满二叉树节点值对应
+ *
+ * 特性：
+ * 1，在第i层最对有2的i-1次方个节点
+ * 2，高度为K的二叉树最多有2的K次方-1个节点
+ * 3，对任何一颗二叉树，如果叶结点有n0个，度为2的非叶结点有n2个，则有n0 = n2+1
+ * （证明：从下往上看，从上往下看 e = n1 + 2* n2 = n0+n1+n2-1）
+ * 4，具有 n 个结点的完全二叉树的高度为 [log2n] + 1 （[x] 表示不大于 x 的最大整数）；
+ * 5，在一棵完全二叉树里面，结点按层次编号之后，是能够反应父子关系。
+ *
+ */
+#define TEST52_BTREE 1
+
 
 #if TEST6_SEARCH
 
@@ -553,7 +574,13 @@ Test tp[1000];
 TestProxy pt[1000];
 
 #endif
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_myalgorithm_tab_MainActivity_string1(
+        JNIEnv* env, jobject /* this */) {
+    string str = "Exception";
 
+    return env->NewStringUTF(str.c_str());
+}
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         JNIEnv* env, jobject /* this */) {
@@ -970,6 +997,43 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current: %c",t.current());
     }
 
+    BTree<int> bt;
+    BTreeNode<int>* n;
+    bt.insert(1, nullptr);
+
+    n = bt.find(1);
+    bt.insert(2, n);
+    bt.insert(3, n);
+
+    n = bt.find(2);
+    bt.insert(4, n);
+    bt.insert(5, n);
+
+    n = bt.find(4);
+    bt.insert(8, n);
+    bt.insert(9, n);
+
+    n = bt.find(5);
+    bt.insert(10, n);
+
+    n = bt.find(3);
+    bt.insert(6, n);
+    bt.insert(7, n);
+
+    n = bt.find(6);
+    bt.insert(11, n,LEFT);
+
+    int a[] = {8,9,10,11,7};
+    for (int i = 0; i < 5; ++i) {
+        TreeNode<int>* node = bt.find(a[i]);
+        while (node){
+            __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, " %d",node->value);
+            node = node->parent;
+        }
+    }
+
+    //bt.find(1);
+    //bt.find(&btn);
 
 #endif
 
