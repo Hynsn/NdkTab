@@ -13,14 +13,14 @@ protected:
     T* m_array;
 public:
     virtual bool set(int i,const T& e){
-        bool ret = ((i>>0)&&(i<length()));
+        bool ret = ((i>=0)&&(i<length()));
         if(ret){
             m_array[i] = e;
         }
         return ret;
     }
     virtual bool get(int i,T& e){
-        bool ret = ((i>>0)&&(i<length()));
+        bool ret = ((i>=0)&&(i<length()));
         if(ret){
             e = m_array[i];
         }

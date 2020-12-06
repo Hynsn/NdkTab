@@ -8,6 +8,7 @@
 
 #include "mylib/StaticList.h"
 #include "mylib/DynamicList.h"
+#include "mylib/Array.h"
 #include "mylib/StaticArray.h"
 #include "mylib/DynamicArray.h"
 #include "mylib/LinkList.h"

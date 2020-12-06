@@ -117,7 +117,7 @@ const char * LOG_TGA = "LOG_TGA";
  * 特点：能够表示任意的树形结构；每个结点包含一个数据和两个指针；孩子结点指针和兄弟结点指针构成了树杈。
  *
  */
-#define TEST52_GTREE 1
+#define TEST52_GTREE 0
 
 /**
  * 二叉树
@@ -133,6 +133,8 @@ const char * LOG_TGA = "LOG_TGA";
  * （证明：从下往上看，从上往下看 e = n1 + 2* n2 = n0+n1+n2-1）
  * 4，具有 n 个结点的完全二叉树的高度为 [log2n] + 1 （[x] 表示不大于 x 的最大整数）；
  * 5，在一棵完全二叉树里面，结点按层次编号之后，是能够反应父子关系。
+ *
+ *
  *
  */
 #define TEST52_BTREE 1
@@ -996,7 +998,8 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     for (t.begin(); !t.end(); t.next()) {
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current: %c",t.current());
     }
-
+#endif
+#ifdef TEST52_BTREE
     BTree<int> bt;
     BTreeNode<int>* n;
     bt.insert(1, nullptr);
@@ -1024,6 +1027,10 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     bt.insert(11, n,LEFT);
 
     int a[] = {8,9,10,11,7};
+
+    SharePointer<Tree<int>> sp2 = bt.remove(3);
+
+    /*
     for (int i = 0; i < 5; ++i) {
         TreeNode<int>* node = bt.find(a[i]);
         while (node){
@@ -1031,12 +1038,20 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
             node = node->parent;
         }
     }
-
+     */
+    for (bt.begin(); !bt.end(); bt.next()) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current: %d",bt.current());
+    }
     //bt.find(1);
     //bt.find(&btn);
 
-#endif
+    SharePointer<Array<int>> sp3 = bt.traversal(PostOrder);//InOrder PostOrder
 
+    for (int i = 0; i < (*sp3).length(); i++) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "sp3: %d ",((*sp3)[i]));
+    }
+
+#endif
     string str = "Exception";
 
     return env->NewStringUTF(str.c_str());
