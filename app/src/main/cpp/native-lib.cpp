@@ -1,8 +1,6 @@
 #include <jni.h>
 #include <string>
-
 #include <iostream>
-
 #include <android/log.h>
 
 #include "Mylib.h"
@@ -137,8 +135,9 @@ const char * LOG_TGA = "LOG_TGA";
  *
  *
  */
-#define TEST52_BTREE 1
+#define TEST52_BTREE 0
 
+#define TEST52_BTREE_TEST 1
 
 #if TEST6_SEARCH
 
@@ -576,6 +575,186 @@ Test tp[1000];
 TestProxy pt[1000];
 
 #endif
+
+#if TEST52_BTREE_TEST
+
+template <typename T>
+BTreeNode<T>* createTree() {
+    static BTreeNode<int> ns[9];
+    for (int i = 0; i < 9; ++i) {
+        ns[i].value = i;
+        ns[i].parent = nullptr;
+        ns[i].left = nullptr;
+        ns[i].right = nullptr;
+    }
+    ns[0].left = &ns[1];
+    ns[0].right = &ns[2];
+    ns[1].parent = &ns[0];
+    ns[2].parent = &ns[0];
+
+    ns[1].left = &ns[3];
+    ns[1].right = nullptr;
+    ns[3].parent = &ns[1];
+
+    ns[2].left = &ns[4];
+    ns[2].right = &ns[5];
+    ns[4].parent = &ns[2];
+    ns[5].parent = &ns[2];
+
+    ns[3].left = nullptr;
+    ns[3].right = &ns[6];
+    ns[6].parent = &ns[3];
+
+    ns[4].left = &ns[7];
+    ns[4].right = nullptr;
+    ns[7].parent = &ns[4];
+
+    ns[5].left = &ns[8];
+    ns[5].right = nullptr;
+    ns[8].parent = &ns[5];
+
+    return ns;
+}
+
+template <typename T>
+void printInorder(BTreeNode<T>* node) {
+    if(node!= nullptr){
+        printInorder(node->left);
+        p_printf(" %d ",node->value);
+        printInorder(node->right);
+    }
+}
+
+/**
+ * 删除二叉树中的单度结点，结点包含指向父结点的指针
+ * @tparam T
+ * @param node
+ * @return
+ */
+template <typename T>
+BTreeNode<T>* delOdd1(BTreeNode<T>* node) {
+    BTreeNode<T>* ret = nullptr;
+    if(node != nullptr) {
+        if(((node->left != nullptr)&&(node->right == nullptr)) ||
+            ((node->left == nullptr)&&(node->right != nullptr))) {
+            BTreeNode<T>* parent = dynamic_cast<BTreeNode<T>*>(node->parent); // 记录父结点
+            BTreeNode<T>* node_child = (node->left!= nullptr) ? node->left : node->right;
+
+            if(parent == nullptr){ // 父结点为根结点，子节点为单度的情况
+                node_child->parent = nullptr;
+            }
+            else {
+                BTreeNode<T>*& parent_child = (parent->left==node) ? parent->left : parent->right;
+                parent_child = node_child;// 父结点的左指针指向当前结点的左孩子
+                node_child = parent;// 当前结点的子孩子指向父结点
+            }
+            if(node->flag()) delete node;
+
+            ret = delOdd1(node_child);
+        }
+        else {
+            delOdd1(node->left);
+            delOdd1(node->right);
+
+            ret = node;
+        }
+    }
+    return ret;
+}
+
+/**
+ * 删除二叉树中的单度结点，结点中只包含左右孩子的指针
+ * @tparam T
+ * @param node 结点指针的引用
+ */
+template <typename T>
+void delOdd2(BTreeNode<T>*& node) {
+    if(node != nullptr){
+        if(((node->left != nullptr)&&(node->right == nullptr)) ||
+           ((node->left == nullptr)&&(node->right != nullptr))) {
+            BTreeNode<T>* node_child = (node->left!= nullptr) ? node->left : node->right;
+
+            if(node->flag()) delete node;
+
+            node = node_child;
+
+            delOdd2(node);
+        }
+        else {
+            delOdd2(node->left);
+            delOdd2(node->right);
+        }
+    }
+}
+
+// 编写一个函数用于中序线索化二叉树，不能使用其他数据结构
+template <typename T>
+void inOrderThread(BTreeNode<T>* node,BTreeNode<T>*& pre) {
+    if(node != nullptr){
+        inOrderThread(node->left,pre);
+        // connect pre node
+        node->left = pre;
+        if(pre != nullptr) pre->right = node;
+
+        pre = node;
+
+        inOrderThread(node->right,pre);
+    }
+}
+template <typename T>
+BTreeNode<T>* inOrderThread1(BTreeNode<T>* node) {
+    BTreeNode<T>* pre = nullptr;
+    inOrderThread(node,pre);
+
+    while ((node!=nullptr) && (node->left != nullptr)){
+        node = node->left;
+    }
+
+    return node;
+}
+
+// 解法2，中序遍历的结点次序正好是结点的水平次序
+
+/**
+ *
+ * @tparam T
+ * @param node 根结点
+ * @param head 转换成功后指向双向链表的首结点
+ * @param tail 转换成功后指向双向链表的尾结点
+ */
+template <typename T>
+void inOrderThread(BTreeNode<T>* node,BTreeNode<T>*& head,BTreeNode<T>*& tail) {
+    if(node != nullptr){
+        BTreeNode<T>* h = nullptr;
+        BTreeNode<T>* t = nullptr;
+        inOrderThread(node->left,h,t); // 对左子树线索化
+        // 连接尾部
+        node->left = t;
+        if(t != nullptr) t->right = node;
+
+        head = (h != nullptr) ? h :node;
+
+        h = nullptr; t = nullptr; // 恢复辅助指针
+
+        inOrderThread(node->right,h,t); // 对右子树线索化
+        // 连接头部
+        node->right = h;
+        if(h != nullptr) h->left = node;
+
+        tail = (t != nullptr) ? t : node;
+    }
+}
+template <typename T>
+BTreeNode<T>* inOrderThread2(BTreeNode<T>* node) {
+    BTreeNode<T>* head = nullptr;
+    BTreeNode<T>* tail = nullptr;
+
+    inOrderThread(node,head,tail);
+
+    return head;
+}
+
+#endif
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_myalgorithm_tab_MainActivity_string1(
         JNIEnv* env, jobject /* this */) {
@@ -583,6 +762,7 @@ Java_com_myalgorithm_tab_MainActivity_string1(
 
     return env->NewStringUTF(str.c_str());
 }
+
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         JNIEnv* env, jobject /* this */) {
@@ -1050,6 +1230,32 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     for (int i = 0; i < (*sp3).length(); i++) {
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "sp3: %d ",((*sp3)[i]));
     }
+
+    BTreeNode<int>* head = bt.thread(PostOrder);
+
+    while(head->right != nullptr){
+        head = head->right;
+    }
+
+    while (head != nullptr){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "thread: %d ",head->value);
+        head = head->left;
+    }
+
+#endif
+#if TEST52_BTREE_TEST
+
+    BTreeNode<int>* ns = createTree<int>();
+    printInorder(ns);
+    p_printf("\n");
+    //ns = delOdd1(ns);
+    //delOdd2(ns);
+    //printInorder(ns);
+
+    p_printf("\n");
+    //ns = inOrderThread1(ns);
+    ns = inOrderThread2(ns);
+    printInorder(ns);
 
 #endif
     string str = "Exception";

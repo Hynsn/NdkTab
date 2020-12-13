@@ -11,7 +11,8 @@ aux_source_directory( . NATIVE_SRC )
 # 将 "./src/main/cpp" 目录下的子目录rtc_base保存到 "RTC_BASE" 中，然后在 add_library 方法调用。
 aux_source_directory( ./mylib/ MYLIB )
 
-file(GLOB CPP_FILES "mylib/*.cpp")
+file(GLOB CPP_LIB_FILES "mylib/*.cpp")
+file(GLOB CPP_FILES "*.cpp")
 
 # 将 RTC_BASE 增加到 NATIVE_SRC 中，这样子目录的源文件也加入了编译行列中，当然也可以不加到 NATIVE_SRC，直接调用add_library。
 list(APPEND NATIVE_SRC ${MYLIB})
@@ -27,6 +28,7 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
+             ${CPP_LIB_FILES}
              ${CPP_FILES}
              ${NATIVE_SRC} )
 

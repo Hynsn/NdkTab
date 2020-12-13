@@ -27,5 +27,6 @@
 #include "mylib/BTree.h"
 #include "mylib/BTreeNode.h"
 #include "mylib/Test.h"
+#include "mylib/Log.h"
 
 #endif // MYLIB_H

@@ -174,6 +174,26 @@ protected:
                 break;
         }
     }
+    BTreeNode<T>* connect(LinkQueue<BTreeNode<T>*>& queue) {
+        BTreeNode<T>* ret = nullptr;
+        if(queue.length() > 0 ){
+            // init
+            ret = queue.front();
+            BTreeNode<T>* slider = queue.front();
+            queue.remove();
+            slider->left = nullptr;
+            // connect
+            while (queue.length() > 0){
+                slider->right = queue.front();
+                queue.front()->left = slider;
+                slider = queue.front();
+                queue.remove();
+            }
+            slider->right = nullptr;
+        }
+        return ret;
+    }
+
 public:
     bool insert(TreeNode<T>* node) {
         return insert(node,ANY);
@@ -289,7 +309,6 @@ public:
         }
         return ret;
     }
-
     T current()
     {
         if(!end()) {
@@ -316,6 +335,20 @@ public:
         }
         return  ret;
     }
+
+    BTreeNode<T>* thread(BTTraversal order){
+        BTreeNode<T>* ret = nullptr;
+        LinkQueue<BTreeNode<T>*> queue;
+        traversal(order, queue);
+        ret = connect(queue);
+
+        this->m_root = nullptr;
+        m_queue.clear();
+
+        return ret;
+    }
+
+
     ~BTree(){
         clear();
     }
