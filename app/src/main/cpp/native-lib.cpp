@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
+
 #include <iostream>
+
 #include <android/log.h>
 
 #include "Mylib.h"
@@ -136,6 +138,19 @@ const char * LOG_TGA = "LOG_TGA";
  *
  */
 #define TEST52_BTREE 0
+/*
+1，将二叉树转换为双向链表的过程（非线性 ==> 线性）:
+ 实际工程开发中，很大一部分情况下，二叉树一旦建立之后，就不会轻易改动，一般的用于遍历，并且这种操作一般执行很多；
+ 先中后序遍历都是递归完成的，实际工程开发中，对一棵已经建立的二叉树反复执行先序遍历，效率低，所以不推荐反复的递归的遍历；
+ 直接将遍历后的结果保存下来，下一次遍历直接用这个结果就可以；
+ 工程开发中还有一种常见情况，就是要反复的知道某个结点在中序遍历下，前驱结点是谁、后继结点是谁，需要这三个结点一起来判断是否要执行后续的操作，这个时候也需要遍历、反复多次；
+ 因此线性化二叉树就被创建出来，高效访问；
+#define TEST52_BTREE 0
+
+2，能够反映某种二叉树的遍历次序（结点的先后访问次序）：
+利用结点的 right 指针指向遍历（某种遍历）中的后继结点；
+利用结点的 left 指针指向遍历（某种遍历）中的前驱结点；
+ */
 
 #define TEST52_BTREE_TEST 1
 
@@ -624,7 +639,22 @@ void printInorder(BTreeNode<T>* node) {
         printInorder(node->right);
     }
 }
-
+template < typename T >
+void printDualList(BTreeNode<T>* node)
+{
+    BTreeNode<T>* g = node;
+    p_printf("head -> tail:");
+    while( node != NULL ) {
+        p_printf(" %d",node->value);
+        g = node;
+        node = node->right;
+    }
+    p_printf("\ntail -> head:");
+    while( g != NULL ){
+        p_printf(" %d",g->value);
+        g = g->left;
+    }
+}
 /**
  * 删除二叉树中的单度结点，结点包含指向父结点的指针
  * @tparam T
@@ -713,10 +743,8 @@ BTreeNode<T>* inOrderThread1(BTreeNode<T>* node) {
     return node;
 }
 
-// 解法2，中序遍历的结点次序正好是结点的水平次序
-
 /**
- *
+ * 解法2，中序遍历的结点次序正好是结点的水平次序
  * @tparam T
  * @param node 根结点
  * @param head 转换成功后指向双向链表的首结点
@@ -1220,7 +1248,7 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     }
      */
     for (bt.begin(); !bt.end(); bt.next()) {
-        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current: %d",bt.current());
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current1: %d",bt.current());
     }
     //bt.find(1);
     //bt.find(&btn);
@@ -1231,6 +1259,27 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "sp3: %d ",((*sp3)[i]));
     }
 
+    SharePointer<BTree<int>> btClone = bt.clone();
+
+    if(*btClone==bt){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "clone == old");
+    }
+    BTree<int> nbt;
+    BTreeNode<int>* nn;
+    nbt.insert(1, nullptr);
+
+    nn = nbt.find(1);
+    nbt.insert(2, nn);
+    nbt.insert(3, nn);
+
+    nn = nbt.find(2);
+    nbt.insert(4, nn);
+    nbt.insert(5, nn);
+    SharePointer<BTree<int>> addbt = bt.add(nbt);
+
+    for (addbt->begin(); !addbt->end(); addbt->next()) {
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "current1: %d",addbt->current());
+    }
     BTreeNode<int>* head = bt.thread(PostOrder);
 
     while(head->right != nullptr){
@@ -1241,10 +1290,8 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "thread: %d ",head->value);
         head = head->left;
     }
-
 #endif
 #if TEST52_BTREE_TEST
-
     BTreeNode<int>* ns = createTree<int>();
     printInorder(ns);
     p_printf("\n");
@@ -1255,7 +1302,7 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     p_printf("\n");
     //ns = inOrderThread1(ns);
     ns = inOrderThread2(ns);
-    printInorder(ns);
+    printDualList(ns);
 
 #endif
     string str = "Exception";
