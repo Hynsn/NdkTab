@@ -1,29 +1,28 @@
-#ifndef LINKLIST_H
-#define LINKLIST_H
+//
+// Created by housaibang on 2020-12-16.
+//
+
+#ifndef DUALLINKLIST_H
+#define DUALLINKLIST_H
 
 #include "List.h"
 #include "Exception.h"
 #include <android/log.h>
 
-extern const char * LOG_TGA;;
-
 namespace HynLib {
-
-template <typename T>
-class LinkList : public List<T>
-{
+template<typename T>
+class DualLinkList : public List<T> {
 protected:
-    struct Node : public Object
-    {
+    struct Node : public Object {
         T value;
         Node* next;
+        Node* pre;
     };
-    // 匿名类，避免构造函数泛型T的创建
-    mutable struct : public Object{
-        char reserved[sizeof(T)]; //mutable get() const 取头结点的值编译器认为会修改头节点的值
+    mutable struct : public Object {
+        char reserved[sizeof(T)];
         Node* next;
+        Node* pre;
     } m_header;
-
     int m_length;
     int m_step;
     Node* m_current;
@@ -34,12 +33,14 @@ protected:
     virtual void destroy(Node* pt){
         delete pt;
     }
-
 public:
-    LinkList()
+    DualLinkList()
     {
         m_header.next = nullptr;
+        m_header.pre = nullptr;
         m_length = 0;
+        m_step = 1;
+        m_current = nullptr;
     }
 
     Node* position(int i) const
@@ -64,11 +65,22 @@ public:
             Node* node = create();
             if(node!=nullptr){
                 Node* current = position(i);
+                Node* next = current->next;
 
                 node->value = e; // 赋值
-                node->next = current->next; // node的next指针指向下一个节点
+
+                node->next = next; // node的next指针指向下一个节点
                 current->next = node; // 当前节点的next指针指向node
 
+                if(current != reinterpret_cast<Node*>(&m_header)){
+                    node->pre = current;
+                }
+                else{
+                    node->pre = nullptr;
+                }
+                if(next != nullptr){
+                    next->pre = node;
+                }
                 m_length++;
             }
             else {
@@ -83,10 +95,17 @@ public:
         bool ret = ((i>=0)&&(i<=m_length));
         if(ret){
             Node* current = position(i);
-
             Node* toDel = current->next;
-            if(m_current == toDel) m_current = toDel->next;
-            current->next = toDel->next;
+            Node* next = toDel->next;
+
+            // 记录游标
+            if(m_current == toDel) m_current = next;
+
+            current->next = next;
+            if(next!= nullptr){
+                next->pre = toDel->pre;
+            }
+
             m_length--;
             //delete toDel;
             destroy(toDel);
@@ -151,13 +170,8 @@ public:
 
     void clear()
     {
-        while(m_header.next){
-            Node* toDel = m_header.next;
-            m_header.next = toDel->next;
-
-            m_length--;
-            //delete toDel;
-            destroy(toDel);
+        while (m_length>0){
+            remove(0);
         }
     }
 
@@ -194,12 +208,18 @@ public:
         }
         return (i == m_step);
     }
-
-    ~LinkList()
+    virtual bool pre(){
+        int i = 0;
+        while (i<m_step && !end()){
+            m_current = m_current->pre;
+            i++;
+        }
+        return (i == m_step);
+    }
+    ~DualLinkList()
     {
         clear();
     }
 };
 }
-
-#endif // LINKLIST_H
+#endif //DUALLINKLIST_H

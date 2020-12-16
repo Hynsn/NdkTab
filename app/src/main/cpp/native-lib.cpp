@@ -66,6 +66,20 @@ const char * LOG_TGA = "LOG_TGA";
  */
 #define TEST28_SHAREDPOINTER 0
 
+// 循环链表
+/*
+ 概念上，每个元素都有一个前驱和后继，所有元素逻辑上构成一个环。（想到了约瑟夫环丢手绢问题）
+ 代码实现上，循环链表是一种特殊的单链表；它的尾结点指针域保存了首结点的地址。
+ */
+#define TEST29_CIRCLELIST 0
+
+// 双向链表
+/*
+ * 单链表的缺点：单向性只能从头结点开始访问链表中的元素，如需逆向访问，效率极低。
+ *
+ */
+#define TEST30_DUALLINKLIST 1
+
 // 数组栈，特殊的线性表唯一特性 先进后出。
 // 使用原生数组作为存储结构，存在缺点就是，链表构造函数和析构函数初始化时需要频繁执行。
 #define TEST34_STATICSTACK 0
@@ -152,7 +166,7 @@ const char * LOG_TGA = "LOG_TGA";
 利用结点的 left 指针指向遍历（某种遍历）中的前驱结点；
  */
 
-#define TEST52_BTREE_TEST 1
+#define TEST52_BTREE_TEST 0
 
 #if TEST6_SEARCH
 
@@ -232,6 +246,28 @@ public:
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "~Test()");
     }
 };
+#endif
+
+#if TEST29_CIRCLELIST
+/**
+ *
+ * @param sum 总人数
+ * @param k 从第几个人开始报数
+ * @param m 报数
+ */
+void joseph_circle(int sum,int k,int m){
+    CircleList<int> circles;
+    for (int i = 1; i <= sum; i++)
+    {
+        circles.insert(i);
+    }
+    circles.move(k-1,m-1);
+    while (circles.length() > 0){
+        circles.next();
+        p_printf(" %d \n",circles.current());
+        circles.remove(circles.find(circles.current()));
+    }
+}
 #endif
 
 #if TEST34_STATICSTACK
@@ -982,7 +1018,38 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
     sp1.clear();
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "SharePointer op: %d",(sp1==sp0));
 #endif
+#if TEST29_CIRCLELIST
+    joseph_circle(41,1,3);
+#endif
+#if TEST30_DUALLINKLIST
 
+    DualLinkList<int> dl;
+    for (int i = 0; i < 5; ++i) {
+        dl.insert(0,i);
+        dl.insert(0,5);
+    }
+//    for (dl.move(0); !dl.end(); dl.next()) {
+//        p_printf(" %d ",dl.current());
+//    }
+//    p_printf("\n");
+//    for (dl.move(dl.length()-1); !dl.end(); dl.pre()) {
+//        p_printf(" %d ",dl.current());
+//    }
+
+    dl.move(dl.length()-1);
+
+    while (!dl.end()){
+        if(dl.current()==5){
+            dl.remove(dl.find(dl.current()));
+        }
+        else{
+            dl.pre();
+        }
+    }
+    for (dl.move(0); !dl.end(); dl.next()) {
+        p_printf(" %d ",dl.current());
+    }
+#endif
 #if TEST34_STATICSTACK
 
 //    StaticStack<int,8> stack;

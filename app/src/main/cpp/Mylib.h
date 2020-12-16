@@ -14,6 +14,8 @@
 #include "mylib/LinkList.h"
 #include "mylib/StaticLinkList.h"
 #include "mylib/SharedPointer.h"
+#include "mylib/CircleList.h"
+#include "mylib/DualLinkList.h"
 
 #include "mylib/StaticStack.h"
 #include "mylib/LinkStack.h"
