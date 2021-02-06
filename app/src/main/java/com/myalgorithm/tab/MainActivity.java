@@ -9,8 +9,9 @@ import android.widget.TextView;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    static String TAG = MainActivity.class.getSimpleName();
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -21,9 +22,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.btn_run).setOnClickListener(this);
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+
+        bindLogPipe();
+//        writeMessage("test");
+//        //Log.i("TAG", "onCreate: "+readMessage());
+//        tv.setText(readMessage());
 
         new Thread(new Runnable() {
             @Override
@@ -101,6 +107,25 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("TAG", "run: "+stringBuffer.length()+","+(end-start));
             }
         }).start();
+
+        findViewById(R.id.btn_run).performClick();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_run:
+                stringFromJNI();
+                //testPipeSize();
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unbindLogPipe();
     }
 
     /**
@@ -108,4 +133,10 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    public native void unbindLogPipe();
+    public native int bindLogPipe();
+    public native String readMessage();
+    public native int writeMessage(String msg);
+    public native int testPipeSize();
 }
