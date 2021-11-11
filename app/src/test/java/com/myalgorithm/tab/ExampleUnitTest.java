@@ -2,6 +2,14 @@ package com.myalgorithm.tab;
 
 import android.util.Log;
 
+import com.github.promeg.pinyinhelper.Pinyin;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,30 +30,33 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
-//        String result = "<applications>"
-//                +"<versions__delta>1</versions__delta>"
-//                +"<apps__hashcode></apps__hashcode>"
-//                +"</applications>"+"<applications>"
-//                +"<versions__delta>1</versions__delta>"
-//                +"<apps__hashcode></apps__hashcode>"
-//                +"</applications>"+"<applications>"
-//                +"<versions__delta>1</versions__delta>"
-//                +"<apps__hashcode></apps__hashcode>"
-//                +"</applications>"+"<applications>"
-//                +"<versions__delta>1</versions__delta>"
-//                +"<apps__hashcode></apps__hashcode>"
-//                +"</applications>"+"<applications>"
-//                +"<versions__delta>1</versions__delta>"
-//                +"<apps__hashcode></apps__hashcode>"
-//                +"</applications>";
-//        byte[] buffer = new byte[500];
-//        long start = System.currentTimeMillis();
-//        for (int i = 0; i < 10000; i++) {
-//             buffer = Arrays.copyOf(result.getBytes(),buffer.length);
-//        }
-//        long end = System.currentTimeMillis();
-//        System.out.println("sss " + buffer.length+","+(end-start));
+        String result = "<applications>"
+                +"<versions__delta>1</versions__delta>"
+                +"<apps__hashcode></apps__hashcode>"
+                +"</applications>"+"<applications>"
+                +"<versions__delta>1</versions__delta>"
+                +"<apps__hashcode></apps__hashcode>"
+                +"</applications>"+"<applications>"
+                +"<versions__delta>1</versions__delta>"
+                +"<apps__hashcode></apps__hashcode>"
+                +"</applications>"+"<applications>"
+                +"<versions__delta>1</versions__delta>"
+                +"<apps__hashcode></apps__hashcode>"
+                +"</applications>"+"<applications>"
+                +"<versions__delta>1</versions__delta>"
+                +"<apps__hashcode></apps__hashcode>"
+                +"</applications>";
+        byte[] buffer = new byte[500];
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10000; i++) {
+             buffer = Arrays.copyOf(result.getBytes(),buffer.length);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("sss " + buffer.length+","+(end-start));
+    }
 
+    @Test
+    public void testPermutation(){
         String string = "aaccdd";
         ArrayList<String> list = Permutation(string);
         for(int i=0;i<list.size();i++)
@@ -74,7 +85,6 @@ public class ExampleUnitTest {
                 swap(str,k, i);
             }
         }
-
     }
 
     public static void swap(char[] str,int i,int j)

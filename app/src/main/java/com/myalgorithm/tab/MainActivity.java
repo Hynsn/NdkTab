@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.hynson.nativelib.NativeLib;
+
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
 
-        bindLogPipe();
+        new NativeLib().bindLogPipe();
 //        writeMessage("test");
 //        //Log.i("TAG", "onCreate: "+readMessage());
 //        tv.setText(readMessage());
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_run:
-                stringFromJNI();
+                new NativeLib().stringFromJNI();
                 //testPipeSize();
                 break;
         }
@@ -125,18 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
 
-        unbindLogPipe();
+        new NativeLib().unbindLogPipe();
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
-
-    public native void unbindLogPipe();
-    public native int bindLogPipe();
-    public native String readMessage();
-    public native int writeMessage(String msg);
-    public native int testPipeSize();
 }

@@ -89,7 +89,7 @@ void* pipeTask(void *args) {
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_myalgorithm_tab_MainActivity_unbindLogPipe(JNIEnv* env, jobject /* this */) {
+Java_com_hynson_nativelib_NativeLib_unbindLogPipe(JNIEnv* env, jobject /* this */) {
     if(pipRet == 0){
         pipRet = -1;
         close(log_fd[0]);
@@ -98,7 +98,7 @@ Java_com_myalgorithm_tab_MainActivity_unbindLogPipe(JNIEnv* env, jobject /* this
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_myalgorithm_tab_MainActivity_bindLogPipe(
+Java_com_hynson_nativelib_NativeLib_bindLogPipe(
         JNIEnv* env, jobject /* this */){
     pipRet = pipe(log_fd);
     if(pipRet != 0 ){
@@ -117,7 +117,7 @@ Java_com_myalgorithm_tab_MainActivity_bindLogPipe(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_myalgorithm_tab_MainActivity_readMessage(JNIEnv* env, jobject thiz){
+Java_com_hynson_nativelib_NativeLib_readMessage(JNIEnv* env, jobject thiz){
     if((pipRet==0)){
         fcntl(log_fd[0], F_SETFL, O_NONBLOCK);
         ssize_t ret = read(log_fd[0], log_buff, sizeof(log_buff));
@@ -129,7 +129,7 @@ Java_com_myalgorithm_tab_MainActivity_readMessage(JNIEnv* env, jobject thiz){
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_myalgorithm_tab_MainActivity_writeMessage(JNIEnv* env, jobject thiz,jstring message){
+Java_com_hynson_nativelib_NativeLib_writeMessage(JNIEnv* env, jobject thiz,jstring message){
     ssize_t ret = -1;
     if(pipRet==0) {
         const char *buff = env->GetStringUTFChars(message, 0);
@@ -140,7 +140,7 @@ Java_com_myalgorithm_tab_MainActivity_writeMessage(JNIEnv* env, jobject thiz,jst
     return static_cast<jint>(ret);
 }
 extern "C" JNIEXPORT jint JNICALL
-Java_com_myalgorithm_tab_MainActivity_testPipeSize(JNIEnv* env, jobject thiz){
+Java_com_hynson_nativelib_NativeLib_testPipeSize(JNIEnv* env, jobject thiz){
 
     return static_cast<jint>(1);
 }

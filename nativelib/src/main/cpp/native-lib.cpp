@@ -101,7 +101,7 @@ const char * LOG_TGA = "LOG_TGA";
  */
 #define TEST39_HSTRING 0
 
-#define TEST44_RECURSION 0
+#define TEST44_RECURSION 1
 
 /**
  * 排序的稳定性也比较重要，比较和交换是排序的基本操作。时间性能是排序算法好坏的主要条件。
@@ -308,11 +308,13 @@ void  Allarrange(char *str,int k,int len)
     }
     else
     {
-        for(i=k;i<=len;i++)
+        for(i=k;i<len;i++)
         {
-            swap1(str+i,str+k);
-            Allarrange(str,k+1,len);
-            swap1(str+i,str+k);
+            if((i==0) || (str[0]!=str[i])){
+                swap(str[0],str[k]);
+                Allarrange(str,k+1,len);
+                swap(str[0],str[k]);
+            }
         }
     }
 }
@@ -338,39 +340,38 @@ void permutation(char* s,char* p){
     else{
         int len = strlen(s);
         for (int i = 0; i < len; i++) {
-            if((i==0) || (s[0] != s[i])){
-                swap1(&s[0],&s[i]);
+            //if((i==0) || (s[0] != s[i])){
+                swap(s[0],s[i]);
                 permutation(s+1,p);
-                swap1(&s[0],&s[i]);
-            }
+                swap(s[0],s[i]);
+//            }
         }
     }
 }
 
-void permutation(char s[],int b,int e)
+void swap(char* a, char* b)
 {
-    if((b >= 0)&&(b <= e))
+    char tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+void permutate(char* str, int begin, int end)
+{
+    int i;
+    if(begin == end){
+        static int s_i = 1;
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "id %d: %s ",s_i++,str);
+    }
+    else
     {
-        if(b == e)
+        for(i=begin; i<end; i++)
         {
-            __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "id2: %s ",s);
-        }
-        else
-        {
-            int i = 0;
-
-            for(i = b;i <= e;i++)
-            {
-                int flag = s[b];
-                s[b] = s[i];
-                s[i] = flag;
-                if(s[b] != s[i] || i == b)
-                    permutation(s,b+1,e);
-
-                flag = s[b];
-                s[b] = s[i];
-                s[i] = flag;
-            }
+            //if(i==0 || str[begin]!=str[i]) {
+                swap(str+begin,str+i);
+                permutate(str, begin+1, end);
+                swap(str+begin,str+i);
+//            }
         }
     }
 }
@@ -1140,8 +1141,16 @@ Java_com_myalgorithm_tab_MainActivity_stringFromJNI(
 
 #if TEST44_RECURSION
     //HanoiTower(3,'A','B','C');
-//    char ddd[] = "aacdd";
-//    permutation(ddd,ddd);
+    /*char ddd[] = "aac";
+    permutation(ddd,ddd);*/
+
+    char ddd[] = "aac";
+    int len = strlen(ddd);
+    permutate(ddd, 0, len);
+
+    /*char ttt[] = "aac";
+    int len = strlen(ttt);
+    Allarrange(ttt,0,len);*/
 
 //    Node* list = create_list(1,10);
 //    print_list(list);
