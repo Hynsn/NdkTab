@@ -13,22 +13,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:text="测试"/>
-    <com.myalgorithm.tab.CustomProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/top_tv"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+<!--    <com.myalgorithm.tab.CustomProgressBar-->
+<!--        android:id="@+id/progress_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/top_tv"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
     <TextView
         android:id="@+id/sample_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_run"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/btn_run"
@@ -37,14 +36,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="运行"/>
-    <Button
-        android:id="@+id/btn_run"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="运行"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

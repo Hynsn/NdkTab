@@ -1,3 +1,5 @@
 rootProject.name='MyAlgorithmTab'
 include ':app'
-include ':nativelib'
+include ':stdlib'
+include ':ndklib'
+

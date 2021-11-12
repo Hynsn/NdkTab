@@ -7,17 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hynson.nativelib.NativeLib;
-
-import java.util.Arrays;
+import com.ndk.std.Std;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     static String TAG = MainActivity.class.getSimpleName();
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +21,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_run).setOnClickListener(this);
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
+        tv.setText(new Std().stringFromJNI());
 
-        new NativeLib().bindLogPipe();
+        new Std().bindLogPipe();
 //        writeMessage("test");
 //        //Log.i("TAG", "onCreate: "+readMessage());
 //        tv.setText(readMessage());
@@ -117,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_run:
-                new NativeLib().stringFromJNI();
+                new Std().stringFromJNI();
                 //testPipeSize();
                 break;
         }
@@ -127,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
 
-        new NativeLib().unbindLogPipe();
+        new Std().unbindLogPipe();
     }
 
 }

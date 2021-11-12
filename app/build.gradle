@@ -30,7 +30,8 @@ dependencies {
     implementation 'org.clojars.cbilson:pinyin4j:2.5.0'
 
     implementation 'com.github.promeg:tinypinyin:2.0.3'
-    implementation project(path: ':nativelib') // TinyPinyin核心包，约80KB
+    implementation project(path: ':ndklib')
+    implementation project(path: ':stdlib') // TinyPinyin核心包，约80KB
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
