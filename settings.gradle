@@ -1,4 +1,4 @@
-rootProject.name='MyAlgorithmTab'
+rootProject.name='NdkTab'
 include ':app'
 include ':stdlib'
 include ':ndklib'
