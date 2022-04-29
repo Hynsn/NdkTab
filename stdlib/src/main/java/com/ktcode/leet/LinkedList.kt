@@ -1,7 +1,7 @@
 package com.ktcode.leet
 
 import java.lang.StringBuilder
-import java.util.ArrayList
+import java.util.*
 
 fun main() {
     val list:LinkedList = LinkedList()
@@ -10,9 +10,14 @@ fun main() {
     list.add(e = 3)
     list.add(e = 4)
     list.print()
+    list.revers1(list.headNode)
+
 
     list.remove(3)
     list.print()
+
+    list.revers1(list.headNode)
+
     list.clear()
     list.add(e = 1)
     list.add(e = 2)
@@ -20,6 +25,7 @@ fun main() {
     list.add(e = 4)
     list.print()
 
+    list.revers1(list.headNode)
 }
 
 class Node {
@@ -100,5 +106,25 @@ class LinkedList {
             curNode = curNode.pNext
         }
         println("LinkedList length $length :$sb")
+    }
+
+    // 反转打印 递归实现
+    fun revers1(node: Node?) {
+        node?.let {
+            it.pNext?.let { next ->
+                revers1(next.pNext)
+            }
+            print("${it.value}")
+        }
+        /*if(curNode != null){
+            if(curNode.pNext != null){
+                revers()
+            }
+            print("- ${curNode.value}")
+        }*/
+    }
+    // stack实现
+    fun revers2(){
+
     }
 }
