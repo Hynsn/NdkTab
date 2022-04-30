@@ -10,13 +10,10 @@ fun main() {
     list.add(e = 3)
     list.add(e = 4)
     list.print()
-    list.revers1(list.headNode)
 
 
     list.remove(3)
     list.print()
-
-    list.revers1(list.headNode)
 
     list.clear()
     list.add(e = 1)
@@ -26,6 +23,8 @@ fun main() {
     list.print()
 
     list.revers1(list.headNode)
+
+    list.revers2()
 }
 
 class Node {
@@ -111,20 +110,26 @@ class LinkedList {
     // 反转打印 递归实现
     fun revers1(node: Node?) {
         node?.let {
-            it.pNext?.let { next ->
-                revers1(next.pNext)
+            it.pNext?.run {
+                revers1(this)
             }
-            print("${it.value}")
+            if(it != headNode) {
+                print(" - ${it.value}")
+            }
         }
-        /*if(curNode != null){
-            if(curNode.pNext != null){
-                revers()
-            }
-            print("- ${curNode.value}")
-        }*/
     }
     // stack实现
     fun revers2(){
+        val stack = Stack<Node>()
 
+        var cur: Node? = headNode.pNext
+        while (cur != null){
+            stack.push(cur)
+            cur = cur.pNext
+        }
+        while (stack.isNotEmpty()){
+            val top = stack.pop()
+            print(" - ${top.value}")
+        }
     }
 }
