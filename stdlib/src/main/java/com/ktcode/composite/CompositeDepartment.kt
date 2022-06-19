@@ -1,0 +1,25 @@
+package com.ktcode.composite
+
+class CompositeDepartment : Organ {
+    val list = ArrayList<Organ>()
+
+    fun add(organ: Organ) {
+        list.add(organ)
+    }
+
+    override fun personCount(): Int {
+        val sum = 0
+        list.forEach {
+            sum + it.personCount()
+        }
+        return sum
+    }
+}
+
+fun main() {
+    val compDepart = CompositeDepartment()
+    compDepart.add(LeafDepartment1())
+    compDepart.add(LeafDepartment2())
+
+    println("personCount: ${compDepart.personCount()}")
+}
