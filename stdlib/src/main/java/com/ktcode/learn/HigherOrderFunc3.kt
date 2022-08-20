@@ -15,6 +15,8 @@ class HigherOrderFunc2 {
         lambda1(100)
         lambda2("test")
     }
+
+
 }
 
 
@@ -57,10 +59,9 @@ fun main() {
     }
 
     // 高阶函数+扩展函数
-    "dd".run {
+    "dd".run1 {
         println("跑起来了${it.length}")
     }
-
 }
 
 
@@ -72,6 +73,6 @@ fun main() {
  * T.()会给block的lambda会让lambda实现体里面持有this == T本身。
  * T.(T)会给block的lambda会让lambda实现体里面持有it== T本身。
  */
-inline fun <T, R> T.run(block: (T) -> (R)): R {
+inline fun <T, R> T.run1(block: (T) -> (R)): R {
     return block(this)
 }
