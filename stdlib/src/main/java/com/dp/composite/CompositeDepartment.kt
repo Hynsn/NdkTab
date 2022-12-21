@@ -1,5 +1,8 @@
 package com.ktcode.composite
 
+/**
+ * 组合设计模式
+ */
 class CompositeDepartment : Organ {
     val list = ArrayList<Organ>()
 
@@ -8,9 +11,9 @@ class CompositeDepartment : Organ {
     }
 
     override fun personCount(): Int {
-        val sum = 0
+        var sum = 0
         list.forEach {
-            sum + it.personCount()
+            sum += it.personCount()
         }
         return sum
     }
