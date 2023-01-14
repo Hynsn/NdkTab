@@ -73,7 +73,6 @@ fun main() {
     val r1 = RedGasolineCar()
     r1.move()
 
-    val c = Car(Gasoline(),Bule())
+    val c = Car(Gasoline(), Bule())
     c.move()
 }
-

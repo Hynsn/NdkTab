@@ -1,3 +1,5 @@
+package com.dp.sevenrule
+
 interface LaptopFunction {
     fun startUp()
     fun shutDown()
@@ -9,7 +11,7 @@ interface LaptopProperty {
     val resolution:String
 }
 
-class MacLaptopFunction : LaptopFunction{
+class MacLaptopFunction : LaptopFunction {
     override fun startUp() {
         println("开机")
     }
@@ -19,23 +21,23 @@ class MacLaptopFunction : LaptopFunction{
     }
 }
 
-class MacLaptopProperty: LaptopProperty{
+class MacLaptopProperty: LaptopProperty {
     override val cpu: String = "M1"
     override val size: Int = 1
     override val resolution: String = "1080*960"
     override fun toString(): String {
-        return "MacLaptopProperty(cpu='$cpu', size=$size, resolution='$resolution')"
+        return "com.dp.sevenrule.MacLaptopProperty(cpu='$cpu', size=$size, resolution='$resolution')"
     }
 
 }
 
 data class MacBook(
-    val property:MacLaptopProperty,
-    val function:MacLaptopFunction
+    val property: MacLaptopProperty,
+    val function: MacLaptopFunction
 )
 
 fun main(){
-    val mac = MacBook(MacLaptopProperty(),MacLaptopFunction())
+    val mac = MacBook(MacLaptopProperty(), MacLaptopFunction())
     mac.run {
         println(property.toString())
         function.startUp()

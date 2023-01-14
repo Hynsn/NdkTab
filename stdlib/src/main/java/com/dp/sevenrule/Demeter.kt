@@ -5,12 +5,6 @@ package com.dp.sevenrule
  */
 class Card(var balance: Int = 10)
 
-class Card1(var balance: Int = 10) {
-    fun deduct(f: Int) {
-        balance -= f
-    }
-}
-
 /**
  * 顾客
  */
@@ -18,18 +12,24 @@ class Customer(
     val card: Card = Card()
 )
 
-class Customer1(val card: Card1 = Card1()) {
-    fun pay(f: Int) {
-        card.deduct(f)
-    }
-}
-
 /**
  * 店铺
  */
 class SurfShop {
     fun chargeCustomer(c: Customer, f: Int) {
         c.card.balance -= f
+    }
+}
+
+class Customer1(val card: Card1 = Card1()) {
+    fun pay(f: Int) {
+        card.deduct(f)
+    }
+}
+
+class Card1(var balance: Int = 10) {
+    fun deduct(f: Int) {
+        balance -= f
     }
 }
 
@@ -50,4 +50,3 @@ fun main() {
     s1.chargeCustomer(c1, 10)
     println("finish: ${c1.card.balance}")
 }
-
