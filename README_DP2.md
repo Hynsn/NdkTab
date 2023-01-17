@@ -27,10 +27,11 @@
 | Abstract Factory | Adapter   | Chain of Responsiblity |
 | Builder          | Bridge    | command                |
 | Factory Method   | Composite | interpreter            |
-| Prototype        | Decorator | Meidator               |
-| Singleton        | Facade    | Memento                |
-|                  | Flyweight | Observer               |
-|                  | Proxy     | State                  |
+| Prototype        | Decorator | iterator               |
+| Singleton        | Facade    | Meidator               |
+|                  | Flyweight | Memento                |
+|                  | Proxy     | Observer               |
+|                  |           | State                  |
 |                  |           | Strategy               |
 |                  |           | TemplateMethod         |
 |                  |           | Visitor                |
