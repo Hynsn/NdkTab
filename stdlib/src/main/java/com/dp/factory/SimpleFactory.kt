@@ -16,7 +16,7 @@ class ChangAn(): Car(){
     }
 }
 
-class CarFactory{
+class SimpleCarFactory{
     fun create(type: String): Car{
         return when(type){
             "changcheng" -> ChangCheng()
@@ -27,6 +27,6 @@ class CarFactory{
 }
 
 fun main() {
-    val factory = CarFactory().create("changcheng")
+    val factory = SimpleCarFactory().create("changcheng")
     factory.build()
 }

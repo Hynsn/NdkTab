@@ -1,41 +1,43 @@
 package com.dp.factory
 
 
-interface CarsFactory {
+
+interface CarFactory {
     fun createCar(): Car
 }
 
-class ChangChengFactory : CarsFactory {
-    override fun createCar(): Car {
-        return ChangCheng1()
-    }
-}
-
-class ChangCheng1() : Car() {
+class SuvCar1 : SuvCar(){
     override fun build() {
-        println("build changcheng")
+        println("build SuvCar1")
     }
+
 }
 
-class ChangAnFactory : CarsFactory {
+class ChangChengFactory : CarFactory {
     override fun createCar(): Car {
-        return ChangAn1()
+        return ChangCheng()
+    }
+
+}
+
+class ChangAnFactory : CarFactory {
+    override fun createCar(): Car {
+        return ChangAn()
     }
 }
 
-class ChangAn1() : Car() {
-    override fun build() {
-        println("build changan")
-    }
-}
-
-class Store(val factory: CarsFactory) {
+class Store(val factory: CarFactory) {
     fun create(): Car {
         return factory.createCar()
     }
 }
 
 fun main() {
+    // 长安工厂生产汽车
     val store = Store(ChangAnFactory())
     store.create().build()
+
+    // 长城工厂生产汽车
+    val store1 = Store(ChangChengFactory())
+    store1.create().build()
 }
