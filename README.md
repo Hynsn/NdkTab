@@ -91,7 +91,3 @@ StaticQueue LinkQueue
 
 代码设计原理
 异常安全性
-
-单例
-
-三种实现方式区别
