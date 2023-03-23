@@ -1,78 +1,84 @@
 package com.dp.singleton
 
-object SingletonA{
+object SingletonHungry {
 
-    fun test(){
-        println("SingletonA")
+    fun test() {
+        println("SingletonHungry")
     }
 }
 
-class SingletonB1{
-    companion object{
-        val instance by lazy(LazyThreadSafetyMode.NONE) {
-            SingletonB1()
+class SingletonLazy {
+    companion object {
+        private var instance: SingletonLazy? = null
+        fun getInstance(): SingletonLazy? {
+            if (instance == null) {
+                instance = SingletonLazy()
+            }
+            return instance
         }
+        // 也可以这样写
+        /*val instance by lazy(LazyThreadSafetyMode.NONE) {
+            SingletonDCL()
+        }*/
     }
 
-    fun test(){
-        println("SingletonB")
+    fun test() {
+        println("SingletonLazy")
     }
 }
 
-class SingletonB2(t: Int) {
-    companion object{
-        private var sInstance: SingletonB2? = null
+class SingletonSafeLazy(t: Int) {
+    companion object {
+        private var sInstance: SingletonSafeLazy? = null
 
         @Synchronized
-        fun getInstance(t:Int): SingletonB2? {
+        fun getInstance(t: Int): SingletonSafeLazy? {
             if (sInstance == null) {
-                sInstance = SingletonB2(t)
+                sInstance = SingletonSafeLazy(t)
             }
             return sInstance
         }
     }
 
-    fun test(){
-        println("SingletonB")
+    fun test() {
+        println("SingletonSafeLazy")
     }
 }
 
-class SingletonC{
-    companion object{
+class SingletonDCL {
+    companion object {
         val instance by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            SingletonB1()
+            SingletonDCL()
         }
     }
 
-    fun test(){
-        println("SingletonB")
+    fun test() {
+        println("SingletonDCL")
     }
 }
 
-class SingletonD{
-
-    companion object{
+class SingletonStatic {
+    companion object {
         fun getInstance() = Holder.instance
     }
 
-    private object Holder{
-        val instance = SingletonD()
+    private object Holder {
+        val instance = SingletonStatic()
     }
 
-    fun test(){
-        println("SingletonB")
+    fun test() {
+        println("SingletonStatic")
     }
 }
 
 fun main() {
-    SingletonA.test()
+    SingletonHungry.test()
 
-    SingletonB1.instance.test()
+    SingletonLazy.getInstance()?.test()
 
+    SingletonSafeLazy.getInstance(1)?.test()
 
-    SingletonB2.getInstance(1)?.test()
+    SingletonDCL.instance.test()
 
-    SingletonC.instance.test()
-
-    SingletonD.getInstance().test()
+    SingletonStatic.getInstance().test()
 }
