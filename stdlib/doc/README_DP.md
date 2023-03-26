@@ -35,3 +35,7 @@
 |                  |           | Strategy               |
 |                  |           | TemplateMethod         |
 |                  |           | Visitor                |
+
+
+结构型模式
+帮助我们组合各种对象，实现更好更灵活的结构。
