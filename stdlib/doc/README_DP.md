@@ -20,22 +20,58 @@
 
 - 开拓思维，提升解决问题的能力
 
-分类
+### 分类
 
-| 创建性              | 结构型       | 行为型                    |
-|:----------------:|:---------:|:----------------------:|
-| Abstract Factory | Adapter   | Chain of Responsiblity |
-| Builder          | Bridge    | command                |
-| Factory Method   | Composite | interpreter            |
-| Prototype        | Decorator | iterator               |
-| Singleton        | Facade    | Meidator               |
-|                  | Flyweight | Memento                |
-|                  | Proxy     | Observer               |
-|                  |           | State                  |
-|                  |           | Strategy               |
-|                  |           | TemplateMethod         |
-|                  |           | Visitor                |
+### 创建性
 
+- [x]  Abstract Factory
 
-结构型模式
+- [x]  Builder
+
+- [x]  Factory Method
+
+- [x]  Prototype
+
+- [x]  Singleton
+
+#### 结构型
+
 帮助我们组合各种对象，实现更好更灵活的结构。
+
+- [x]  Adapter
+
+- [ ]  Bridge
+
+- [ ]  Composite
+
+- [ ]  Decorator
+
+- [ ]  Facade
+
+- [ ]  Flyweight
+
+- [ ]  Proxy
+
+#### 行为型
+
+- [ ]  Chain of Responsiblity
+
+- [ ]  Command
+
+- [ ]  interpreter
+
+- [ ]  iterator
+
+- [ ]  Meidator
+
+- [ ]  Memento
+
+- [ ]  Observer
+
+- [ ]  State
+
+- [x]  Strategy
+
+- [ ]  TemplateMethod
+
+- [ ]  Visitor
