@@ -1,107 +1,103 @@
-## 设计模式
+### 概念
 
-设计模式是针对常见问题的通用解决方案。
+一个专门用来处理语言或者解析表达式的设计模式，比如sql、正则，将解析和解释分离，特别适合处理特定领域的语言。
 
-比如保证一个类只有一个实例 -> 单例
+#### 角色介绍
 
-搭建两个不兼容接口之间的桥梁 ->适配器
+- Abstract Expression：抽象表达式
+- Terminal Expression：终结符表达式
+- Non-Terminal Expression：非终结符表达式
+- Context：上下文
 
-为Library、framework提供一个简洁的接口 ->外观
+#### UML
 
-设计模式的必要性
+![](./img/Interpreter.png)
 
-没有设计模式：代码维护成本高，改进空间小
+### 代码实现
 
-优点
+```kt
+/**
+ * 抽象表达式
+ */
+interface Expression {
+    fun interpret(str: String): Boolean
+}
 
-- 减少垃圾代码，提高代码可维护性和可扩展性
+class TerminalExpression(data: Array<String>) : Expression {
+    private val set = HashSet<String>()
 
-- 减少沟通成本
+    init {
+        for (s in data) {
+            set.add(s)
+        }
+    }
 
-- 开拓思维，提升解决问题的能力
+    override fun interpret(str: String): Boolean {
+        return set.contains(str)
+    }
+}
+class AndExpression(val left: Expression, val right: Expression) : Expression {
 
-### 分类
+    override fun interpret(str: String): Boolean {
+        val arry = str.split(SPLIT)
+        return left.interpret(arry[0]) && right.interpret(arry[1])
+    }
 
-### 创建性
+    companion object {
+        const val SPLIT = "的"
+    }
+}
+class Context {
+    private val citys = arrayOf("北京", "太原")
+    private val persons = arrayOf("老人", "孕妇")
 
-- [x]  Abstract Factory
+    private val expression: Expression
 
-- [x]  Builder
+    init {
+        expression = AndExpression(TerminalExpression(citys), TerminalExpression(persons))
+    }
 
-- [x]  Factory Method
+    fun freeRide(info: String) {
+        //提示语，可自行设置
+        val s1 = "哔！" + info.split(AndExpression.SPLIT)[1] + "卡，欢迎乘车，您本次乘车免费！"
+        val s2 = "哔！欢迎乘车，您本次乘车扣费2元！"
+        println(if (expression.interpret(info)) s1 else s2)
+    }
+}
 
-- [x]  Prototype
+fun main() {
+    val bus = Context()
+    bus.freeRide("北京的老人")
+    bus.freeRide("太原的孕妇")
+    bus.freeRide("太原的儿童")
+    bus.freeRide("上海的老人")
+}
+```
 
-- [x]  Singleton
-
-#### 结构型
-
-帮助我们组合各种对象，实现更好更灵活的结构。
-
-- [x]  Adapter
-
-- [ ]  Bridge
-
-- [ ]  Composite
-
-- [ ]  Decorator
-
-- [ ]  Facade
-
-- [ ]  Flyweight
-
-- [ ]  Proxy
-
-#### 行为型
-
-- [ ]  Chain of Responsiblity
-
-- [ ]  Command
-
-- [ ]  interpreter
-
-- [ ]  iterator
-
-- [ ]  Meidator
-
-- [ ]  Memento
-
-- [ ]  Observer
-
-- [ ]  State
-
-- [x]  Strategy
-
-- [ ]  TemplateMethod
-
-- [ ]  Visitor
-
-一个专门用来处理语言或者解析表达式的设计模式，比如sql、正则
-将解析和解释分离，特别适合处理特定领域的语言。
-主要组件：
-abstract Expression
-terminal expression
-non-terminal expression
-context
+### 优缺点
 
 优点：
-1. 易于扩展或者修改
-2. 灵活
-3. 关注点分离
-4. 代码复用
-缺点：
-5. 性能问题
-6. 调试困难
-7. 复杂性增加
-8. 实用性有限
 
-适用场景
-某个特定类型问题发生频率足够高。
-1. 领域特定语言
-2. 复杂输入解释
-3. 可扩展的语言结构
-4. 日志处理：适用脚本语言或编程语言处理日志时，有很多服务会产生大量日志，需要对日志进行解析生成报表，各服务的日志格式不同数据要素相同。
-应用：
-5. 编译器、解释器
-6. 配置文件解析
-7. 查询语言解析
+- 易于扩展或者修改
+- 灵活
+- 关注点分离
+- 代码复用
+
+缺点：
+
+- 性能问题
+- 调试困难
+- 复杂性增加
+- 实用性有限
+
+### 应用场景
+
+- 领域特定语言
+- 复杂输入解释
+- 可扩展的语言结构
+
+比如编译器、解释器，配置文件解析，查询语言解析，日志处理（脚本语言或编程语言处理日志时，有很多服务会产生大量日志，需要对日志进行解析生成报表，各服务的日志格式不同数据要素相同）等。
+
+### 总结
+
+适用某个特定类型问题发生频率足够高的场景，对于复杂文法解释器模式不是一个很好的选择。
