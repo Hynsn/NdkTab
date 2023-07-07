@@ -89,7 +89,7 @@ val RMB_100 = run {
     PartialFunction(definetAt, handler)
 }
 
-fun atmMechine(atmChain: PartialFunction<Current, Unit>, cash: Current): Int {
+fun ATMMachine(atmChain: PartialFunction<Current, Unit>, cash: Current): Int {
     atmChain(cash)
     return if (cash.cash < 5) {
         if (cash.cash > 0) {
@@ -97,14 +97,14 @@ fun atmMechine(atmChain: PartialFunction<Current, Unit>, cash: Current): Int {
         }
         0
     } else {
-        atmMechine(atmChain, cash)
+        ATMMachine(atmChain, cash)
     }
 }
 
 fun main(args: Array<String>) {
     val atmChain = RMB_100 orElse RMB_50 orElse RMB_20 orElse RMB_10 orElse RMB_5
     val user = Current(1084, ArrayList<String>())
-    atmMechine(atmChain, user)
+    ATMMachine(atmChain, user)
     for (s in user.message) {
         println(s)
     }
