@@ -4,12 +4,12 @@
 
 #### 角色介绍
 
-- Command 命令
-- 具体命令 ConcreteCommand
+- Command: 命令接口
+- ConcreteCommand: 具体命令实现类
 
 #### UML
 
-一张图片
+![](./img/command.png)
 
 ### 代码实现
 
@@ -71,7 +71,7 @@ at com.dp.command.CommandProcessorKt.main(CommandProcessor.kt)
 - 解偶发送者和接收者
 - 可扩展性
 - 简化和集中错误处理
-- 支持撤销和重做功能
+- 支持撤销和重做功能，可与备忘录结合实现命令的撤销与恢复
 - 易于实现宏命令和组合命令
 
 缺点
@@ -80,18 +80,10 @@ at com.dp.command.CommandProcessorKt.main(CommandProcessor.kt)
 
 ### 应用场景
 
-列举应用场景
 - 文本编辑器
 - 图新编辑器
 - 不同进程间交互
 ### 总结
 
-一段总结
+命令模式的结果就是接收方的执行结果，但为了以命令的形式设计，引入额外类型增加理解上的困难。不过这也是设计模式的通病，抽象必然会增加额外的类，代码抽离肯定会比聚合更加难理解。
 
-参考：
-
-- a
-
-- b
-
-- c
