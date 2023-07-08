@@ -1,4 +1,4 @@
-package com.ktcode.composite
+package com.dp.composite
 
 /**
  * 组合设计模式

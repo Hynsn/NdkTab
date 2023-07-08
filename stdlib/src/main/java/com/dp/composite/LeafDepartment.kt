@@ -1,4 +1,4 @@
-package com.ktcode.composite
+package com.dp.composite
 
 class LeafDepartment1 : Organ {
     override fun personCount() = 4
