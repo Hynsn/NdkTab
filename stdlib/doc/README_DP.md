@@ -42,36 +42,36 @@
 
 - [ ]  Bridge
 
-- [ ]  Composite
+- [x]  Composite
 
-- [ ]  Decorator
+- [x]  Decorator
 
 - [ ]  Facade
 
-- [ ]  Flyweight
+- [x]  Flyweight
 
 - [ ]  Proxy
 
 #### 行为型
 
-- [ ]  Chain of Responsiblity
+- [x]  Chain of Responsibility
 
-- [ ]  Command
+- [x]  Command
 
-- [ ]  interpreter
+- [x]  interpreter
 
-- [ ]  iterator
+- [x]  iterator
 
-- [ ]  Meidator
+- [ ]  Mediator
 
 - [ ]  Memento
 
 - [ ]  Observer
 
-- [ ]  State
+- [x]  State
 
 - [x]  Strategy
 
-- [ ]  TemplateMethod
+- [x]  TemplateMethod
 
 - [ ]  Visitor
