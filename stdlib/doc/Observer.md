@@ -23,7 +23,8 @@
 ```
 
 关于委托属性参考：[# kotlin入门潜修之类和对象篇—委托及其原理](https://www.jianshu.com/p/aedc1174d798)
-
+【Kotlin委托的原理与使用，以及在Android开发中常用的几个场景】https://juejin.cn/post/7213267574770090039
+【Kotlin开发 委托by - 观心静 - 博客园】https://www.cnblogs.com/guanxinjing/p/15612060.html
 ### 优缺点
 
 优点
