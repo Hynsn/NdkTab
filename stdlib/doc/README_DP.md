@@ -50,7 +50,7 @@
 
 - [x]  Flyweight
 
-- [ ]  Proxy
+- [x]  Proxy
 
 #### 行为型
 
@@ -66,7 +66,7 @@
 
 - [ ]  Memento
 
-- [ ]  Observer
+- [x]  Observer
 
 - [x]  State
 
