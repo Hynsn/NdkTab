@@ -11,8 +11,7 @@
 
 #### UML
 
-![代理](https://www.runoob.com/wp-content/uploads/2014/08/20211025-proxy.svg)
-
+![代理](./img/Proxy.png)
 ### 代码实现
 
 按实现分为静态和动态代理
