@@ -46,7 +46,7 @@
 
 - [x]  Decorator
 
-- [ ]  Facade
+- [x]  Facade
 
 - [x]  Flyweight
 
@@ -64,7 +64,7 @@
 
 - [ ]  Mediator
 
-- [ ]  Memento
+- [x]  Memento
 
 - [x]  Observer
 
