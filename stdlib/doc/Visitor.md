@@ -4,10 +4,11 @@
 
 #### 角色介绍
 
-- Element
-- ConcreteElement
-- Visitor
-- ConcreteVisitor
+- Visitor：抽象访问者，为对象结构每个具体元素类声明一个访问操作。
+- Element：抽象元素，定义一个accept方法
+- ConcreteElement：具体元素，实现抽象元素的accept方法，在accept方法中调用访问者的访问方法以完成对一个元素的操作。
+- ConcreteVisitor：具体访问者，实现抽象访问者声明操作。
+- ObjectStructure：对象结构，是一个集合用于存放元素对象并提供遍历内部元素的方法，通常由List、Set、Map等集合类实现。
 
 #### UML
 
@@ -139,16 +140,14 @@ fun main() {
 适用于数据结构稳定，操作易变，对象的操作之间无关联的场景。
 - 编译器
 - 文档转化，比如markdown转html
-
 ### 总结
 
-安卓开发中RecyclerView，Adapter是访问者对象，而RecyclerView.ViewHolder是一个被访问者对象。
-RecyclerView.Adapter 中，我们需要实现 onCreateViewHolder()、onBindViewHolder() 和 getItemCount() 等方法。
-这些方法被用于创建 ViewHolder 对象、绑定数据和获取列表项的数量等操作
-在 RecyclerView.ViewHolder 中，我们需要定义列表项的视图控件，并在构造函数中将其初始化。当 Adapter 对象需要绑定数据时，ViewHolder 对象会被创建并传递给 Adapter 对象的 onBindViewHolder() 方法中，从而实现对列表项的访问和操作。
-还有就是我们在写一些自定义Lint、Idea或者grade插件时也会简单访问者模式。
+安卓开发中RecyclerView，Adapter是访问者对象，而RecyclerView.ViewHolder是一个被访问者对象。在RecyclerView.Adapter中，
+我们需要实现 onCreateViewHolder()、onBindViewHolder()和getItemCount()等方法。这些方法被用于创建 ViewHolder对象、
+绑定数据和获取列表项的数量等操作。在RecyclerView.ViewHolder中，我们需要定义列表项的视图控件，并在构造函数中将其初始化。
+当Adapter对象需要绑定数据时，ViewHolder对象会被创建并传递给Adapter对象的onBindViewHolder()方法中，从而实现对列表项的访问和操作。
+还有就是我们在写一些自定义Lint、Idea或者grade插件时也会见到访问者模式。
 参考：
-
 - [访问者模式及其应用场景](https://blog.csdn.net/hello_1566/article/details/124456454)
 - [重新认识访问者模式：从实践到本质 ](https://juejin.cn/post/7072928300682706975)
 - [设计模式-访问者模式及应用 ](https://juejin.cn/post/7026956210045714440)
