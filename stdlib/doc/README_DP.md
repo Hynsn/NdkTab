@@ -62,7 +62,7 @@
 
 - [x]  iterator
 
-- [ ]  Mediator
+- [x]  Mediator
 
 - [x]  Memento
 
@@ -74,4 +74,4 @@
 
 - [x]  TemplateMethod
 
-- [ ]  Visitor
+- [x]  Visitor
