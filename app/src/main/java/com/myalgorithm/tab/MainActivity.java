@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ndk.std.Std;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -105,14 +106,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).start();
 
-        findViewById(R.id.btn_run).performClick();
+//        findViewById(R.id.btn_run).performClick();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_run:
-                new Std().stringFromJNI();
+                CrashReport.testJavaCrash();
+//                new Std().stringFromJNI();
                 //testPipeSize();
                 break;
         }
